@@ -1,25 +1,42 @@
-# Stonecutter Fabric template
-## Setup
-1. Review the supported Minecraft versions in `settings.gradle.kts`.
-   For new entries, add `versions/.../gradle.properties` with the same keys as other versions.
-2. Change `mod.group`, `mod.id` and `mod.name` properties in `gradle.properties`.
-3. Rename `com.example` package in `src/main/java`.
-4. Rename `src/main/resources/template.mixins.json` to use your mod's id.
-5. Review the `LICENSE` file. 
-   See the [license decision diagram](https://docs.codeberg.org/getting-started/licensing/#license-decision-diagram) for common options.
-6. Review `src/main/resources/fabric.mod.json` to have up-to-date properties.
+# FastStats - FabricMC
+
+A client implementation of [FastStats](https://faststats.dev/) for FabricMC
 
 ## Usage
-- Use `"Set active project to ..."` Gradle tasks to update the Minecraft version
-  available in `src/` classes.
-- Use `buildAndCollect` Gradle task to store mod releases in `build/libs/`.
-- Enable `mod-publish-plugin` in `stonecutter.gradle.kts` and `build.gradle.kts`
-  and the corresponding code blocks to publish releases to Modrinth and Curseforge.
-- Enable `maven-publish` in `build.gradle.kts` and the corresponding code block
-  to publish releases to a personal maven repository.
 
-## Useful links
-- [Stonecutter beginner's guide](https://stonecutter.kikugie.dev/wiki/start/): *spoiler: you* ***need*** *to understand how it works!*
-- [Fabric Discord server](https://discord.gg/v6v4pMv): for mod development help.
-- [Stonecutter Discord server](https://discord.kikugie.dev/): for Stonecutter and Gradle help.
-- [How To Ask Questions - the guide](http://www.catb.org/esr/faqs/smart-questions.html): also in [video form](https://www.youtube.com/results?search_query=How+To+Ask+Questions+The+Smart+Way).
+```kotlin
+dependencies {
+  implementation("io.github.projectunifed:faststats-fabric:<VERSION>")
+}
+```
+
+```java
+public class ExampleMod implements ModInitializer {
+    // context-aware error tracker, automatically tracks errors in the same class loader
+    public static final ErrorTracker ERROR_TRACKER = ErrorTracker.contextAware();
+
+    // context-unaware error tracker, does not automatically track errors
+    public static final ErrorTracker CONTEXT_UNAWARE_ERROR_TRACKER = ErrorTracker.contextUnaware();
+
+    private final Metrics metrics = FabricMetrics.factory()
+            .url(URI.create("https://metrics.example.com/v1/collect")) // For self-hosted metrics servers only
+
+            // Custom example metrics
+            // For this to work you have to create a corresponding data source in your project settings first
+            .addMetric(Metric.number("example_metric", () -> 42))
+            .addMetric(Metric.string("example_string", () -> "Hello, World!"))
+            .addMetric(Metric.bool("example_boolean", () -> true))
+            .addMetric(Metric.stringArray("example_string_array", () -> new String[]{"Option 1", "Option 2"}))
+            .addMetric(Metric.numberArray("example_number_array", () -> new Number[]{1, 2, 3}))
+            .addMetric(Metric.booleanArray("example_boolean_array", () -> new Boolean[]{true, false}))
+
+            // Attach an error tracker
+            // This must be enabled in the project settings
+            .errorTracker(ERROR_TRACKER)
+
+            .debug(true) // Enable debug mode for development and testing
+
+            .token("YOUR_TOKEN_HERE") // required -> token can be found in the settings of your project
+            .create("example-mod"); // your mod id as defined in fabric.mod.json
+}
+```
