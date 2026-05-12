@@ -5,8 +5,15 @@ A client implementation of [FastStats](https://faststats.dev/) for FabricMC
 ## Usage
 
 ```groovy
+repositories {
+    maven {
+        name = "faststatsReleases"
+        url = uri("https://repo.faststats.dev/releases")
+    }
+}
+
 dependencies {
-  implementation("io.github.projectunifed:faststats-fabric:<VERSION>+<MC_VERSION>")
+    implementation("io.github.projectunifed:faststats-fabric:<VERSION>+<MC_VERSION>") // 0.1.0+1.21.11, 0.1.0+26.1.2
 }
 ```
 
