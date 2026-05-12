@@ -4,9 +4,9 @@ A client implementation of [FastStats](https://faststats.dev/) for FabricMC
 
 ## Usage
 
-```kotlin
+```groovy
 dependencies {
-  implementation("io.github.projectunifed:faststats-fabric:<VERSION>")
+  implementation("io.github.projectunifed:faststats-fabric:<VERSION>+<MC_VERSION>")
 }
 ```
 
