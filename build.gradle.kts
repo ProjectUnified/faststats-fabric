@@ -32,27 +32,14 @@ repositories {
     }
     strictMaven("https://www.cursemaven.com", "CurseForge", "curse.maven")
     strictMaven("https://api.modrinth.com/maven", "Modrinth", "maven.modrinth")
-    maven {
-        name = "faststatsReleases"
-        url = uri("https://repo.faststats.dev/releases")
-    }
 }
 
 dependencies {
-    /**
-     * Fetches only the required Fabric API modules to not waste time downloading all of them for each version.
-     * @see <a href="https://github.com/FabricMC/fabric">List of Fabric API modules</a>
-     */
-    fun fapi(vararg modules: String) {
-        for (it in modules) modImplementation(fabricApi.module(it, property("deps.fabric_api") as String))
-    }
-
     minecraft("com.mojang:minecraft:${sc.current.version}")
     loomx.applyMojangMappings()
     modImplementation("net.fabricmc:fabric-loader:${property("deps.fabric_loader")}")
-    fapi("fabric-lifecycle-events-v1")
 
-    api("dev.faststats.metrics:core:${property("deps.faststats")}")
+    implementation("io.github.projectunified:faststats-core:${property("deps.faststats")}")
 }
 
 java {
@@ -78,7 +65,7 @@ mavenPublishing {
 
     pom {
         name = "FastStats Fabric"
-        description = "A FabricMC project to implement Topper"
+        description = "A FabricMC project to implement FastStats"
         url = "https://github.com/ProjectUnified/faststats-fabric"
 
         licenses {
@@ -105,13 +92,6 @@ mavenPublishing {
             connection = "scm:git:https://github.com/ProjectUnified/faststats-fabric.git"
             developerConnection = "scm:git:git@github.com:ProjectUnified/faststats-fabric.git"
             url = "https://github.com/ProjectUnified/faststats-fabric"
-        }
-
-        withXml {
-            val repositories = asNode().appendNode("repositories")
-            val repository = repositories.appendNode("repository")
-            repository.appendNode("id", "faststatsReleases")
-            repository.appendNode("url", "https://repo.faststats.dev/releases")
         }
     }
 }
