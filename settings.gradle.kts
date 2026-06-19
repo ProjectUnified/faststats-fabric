@@ -24,4 +24,4 @@ stonecutter {
     }
 }
 
-rootProject.name = "Template"
+rootProject.name = "faststats-fabric"
