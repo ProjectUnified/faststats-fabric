@@ -3,7 +3,7 @@ plugins {
     id("com.vanniktech.maven.publish") version "0.36.0" apply false
 }
 
-stonecutter active "26.1"
+stonecutter active "26.2"
 
 // See https://stonecutter.kikugie.dev/wiki/config/params
 stonecutter parameters {
